@@ -484,8 +484,8 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
     }
 
     private _hasCleared = false;
-    private _prevPostProcess: Nullable<PostProcess> = null;
-    private _prevPrevPostProcess: Nullable<PostProcess> = null;
+    protected _prevPostProcess: Nullable<PostProcess> = null;
+    protected _prevPrevPostProcess: Nullable<PostProcess> = null;
 
     protected _setAutoClearAndTextureSharing(postProcess: PostProcess, skipTextureSharing = false) {
         if (this._hasCleared) {
