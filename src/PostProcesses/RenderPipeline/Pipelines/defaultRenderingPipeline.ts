@@ -401,6 +401,8 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
         return this._grainEnabled;
     }
 
+    public addExtraEffects: () => void = () => {};
+
     /**
      * @constructor
      * @param name - The rendering pipeline name (default: "")
@@ -487,7 +489,7 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
     private _prevPostProcess: Nullable<PostProcess> = null;
     private _prevPrevPostProcess: Nullable<PostProcess> = null;
 
-    private _setAutoClearAndTextureSharing(postProcess: PostProcess, skipTextureSharing = false) {
+    protected _setAutoClearAndTextureSharing(postProcess: PostProcess, skipTextureSharing = false) {
         if (this._hasCleared) {
             postProcess.autoClear = false;
         } else {
@@ -512,7 +514,7 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
 
     private _depthOfFieldSceneObserver: Nullable<Observer<Scene>> = null;
 
-    private _buildPipeline() {
+    protected _buildPipeline() {
         if (!this._buildAllowed) {
             return;
         }
@@ -609,6 +611,8 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
             this._setAutoClearAndTextureSharing(this.fxaa, true);
         }
 
+        this.addExtraEffects();
+
         if (this._cameras !== null) {
             this._scene.postProcessRenderPipelineManager.attachCamerasToRenderPipeline(this._name, this._cameras);
         }
@@ -618,7 +622,7 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
         }
     }
 
-    private _disposePostProcesses(disposeNonRecreated = false): void {
+    protected _disposePostProcesses(disposeNonRecreated = false): void {
         for (var i = 0; i < this._cameras.length; i++) {
             var camera = this._cameras[i];
 
