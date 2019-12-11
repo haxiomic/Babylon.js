@@ -105,7 +105,7 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
     private _depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
     private _fxaaEnabled: boolean = false;
     private _imageProcessingEnabled: boolean = true;
-    private _defaultPipelineTextureType: number;
+    protected _defaultPipelineTextureType: number;
     private _bloomScale: number = 0.5;
     private _chromaticAberrationEnabled: boolean = false;
     private _grainEnabled: boolean = false;
@@ -401,8 +401,6 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
         return this._grainEnabled;
     }
 
-    public addExtraEffects: () => void = () => {};
-
     /**
      * @constructor
      * @param name - The rendering pipeline name (default: "")
@@ -611,7 +609,7 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
             this._setAutoClearAndTextureSharing(this.fxaa, true);
         }
 
-        this.addExtraEffects();
+        this._buildAdditionalEffects();
 
         if (this._cameras !== null) {
             this._scene.postProcessRenderPipelineManager.attachCamerasToRenderPipeline(this._name, this._cameras);
@@ -621,6 +619,8 @@ export class DefaultRenderingPipeline extends PostProcessRenderPipeline implemen
             Logger.Warn("MSAA failed to enable, MSAA is only supported in browsers that support webGL >= 2.0");
         }
     }
+
+    protected _buildAdditionalEffects() {}
 
     protected _disposePostProcesses(disposeNonRecreated = false): void {
         for (var i = 0; i < this._cameras.length; i++) {
