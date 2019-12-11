@@ -141,7 +141,7 @@ void main(void) {
 	mat3 normalWorld = mat3(finalWorld);
 
 	#ifdef NONUNIFORMSCALING
-		normalWorld = adjugate(normalWorld);
+		normalWorld = transposeMat3(inverseMat3(normalWorld));
 	#endif
 
 	vNormalW = normalize(normalWorld * normalUpdated);
