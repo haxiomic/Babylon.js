@@ -4843,8 +4843,11 @@ export class Engine {
     public _setupFramebufferDepthAttachments(generateStencilBuffer: boolean, generateDepthBuffer: boolean, width: number, height: number, samples = 1): Nullable<WebGLRenderbuffer> {
         var depthStencilBuffer: Nullable<WebGLRenderbuffer> = null;
         var gl = this._gl;
-
-        let validSamples = Math.min(samples, gl.getParameter(gl.MAX_SAMPLES));
+        
+        let validSamples = 1;
+        if (this.webGLVersion > 1) {
+            validSamples = Math.min(samples, gl.getParameter(gl.MAX_SAMPLES));
+        }
 
         // Create the depth/stencil buffer
         if (generateStencilBuffer) {
