@@ -4891,8 +4891,6 @@ export class Engine {
 
         var gl = this._gl;
 
-        samples = Math.min(samples, gl.getParameter(gl.MAX_SAMPLES));
-
         // Dispose previous render buffers
         if (texture._depthStencilBuffer) {
             gl.deleteRenderbuffer(texture._depthStencilBuffer);
@@ -4926,7 +4924,10 @@ export class Engine {
             }
 
             gl.bindRenderbuffer(gl.RENDERBUFFER, colorRenderbuffer);
-            gl.renderbufferStorageMultisample(gl.RENDERBUFFER, samples, this._getRGBAMultiSampleBufferFormat(texture.type), texture.width, texture.height);
+
+            let validSamples = Math.min(samples, gl.getParameter(gl.MAX_SAMPLES));
+
+            gl.renderbufferStorageMultisample(gl.RENDERBUFFER, validSamples, this._getRGBAMultiSampleBufferFormat(texture.type), texture.width, texture.height);
 
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, colorRenderbuffer);
 
