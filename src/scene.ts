@@ -47,6 +47,7 @@ import { AbstractActionManager } from './Actions/abstractActionManager';
 import { _DevTools } from './Misc/devTools';
 import { WebRequest } from './Misc/webRequest';
 import { InputManager } from './Inputs/scene.inputManager';
+import { InternalTexture } from 'Materials';
 
 declare type Ray = import("./Culling/ray").Ray;
 declare type TrianglePickingPredicate = import("./Culling/ray").TrianglePickingPredicate;
@@ -173,6 +174,8 @@ export class Scene extends AbstractScene implements IAnimatable {
      * The material properties need to be setup according to the type of texture in use.
      */
     public environmentBRDFTexture: BaseTexture;
+
+    public renderTargetTexture?: InternalTexture;
 
     /** @hidden */
     protected _environmentTexture: Nullable<BaseTexture>;
@@ -3525,7 +3528,7 @@ export class Scene extends AbstractScene implements IAnimatable {
 
         // Finalize frame
         if (this.postProcessManager && !camera._multiviewTexture) {
-            this.postProcessManager._finalizeFrame(camera.isIntermediate);
+            this.postProcessManager._finalizeFrame(camera.isIntermediate, this.renderTargetTexture);
         }
 
         // Reset some special arrays
