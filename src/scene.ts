@@ -3430,6 +3430,11 @@ export class Scene extends AbstractScene implements IAnimatable {
             throw new Error("Active camera not set");
         }
 
+        // Prepare Frame
+        if (this.postProcessManager && !camera._multiviewTexture) {
+            this.postProcessManager._prepareFrame(this.renderTargetTexture);
+        }
+
         // Viewport
         engine.setViewport(this.activeCamera.viewport);
 
@@ -3505,11 +3510,6 @@ export class Scene extends AbstractScene implements IAnimatable {
         }
 
         this.onAfterRenderTargetsRenderObservable.notifyObservers(this);
-
-        // Prepare Frame
-        if (this.postProcessManager && !camera._multiviewTexture) {
-            this.postProcessManager._prepareFrame();
-        }
 
         // Before Camera Draw
         for (let step of this._beforeCameraDrawStage) {
