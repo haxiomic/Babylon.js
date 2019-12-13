@@ -4844,13 +4844,15 @@ export class Engine {
         var depthStencilBuffer: Nullable<WebGLRenderbuffer> = null;
         var gl = this._gl;
 
+        let validSamples = Math.min(samples, gl.getParameter(gl.MAX_SAMPLES));
+
         // Create the depth/stencil buffer
         if (generateStencilBuffer) {
             depthStencilBuffer = gl.createRenderbuffer();
             gl.bindRenderbuffer(gl.RENDERBUFFER, depthStencilBuffer);
 
             if (samples > 1) {
-                gl.renderbufferStorageMultisample(gl.RENDERBUFFER, samples, gl.DEPTH24_STENCIL8, width, height);
+                gl.renderbufferStorageMultisample(gl.RENDERBUFFER, validSamples, gl.DEPTH24_STENCIL8, width, height);
             } else {
                 gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_STENCIL, width, height);
             }
@@ -4862,7 +4864,7 @@ export class Engine {
             gl.bindRenderbuffer(gl.RENDERBUFFER, depthStencilBuffer);
 
             if (samples > 1) {
-                gl.renderbufferStorageMultisample(gl.RENDERBUFFER, samples, gl.DEPTH_COMPONENT16, width, height);
+                gl.renderbufferStorageMultisample(gl.RENDERBUFFER, validSamples, gl.DEPTH_COMPONENT16, width, height);
             } else {
                 gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, width, height);
             }
@@ -4925,9 +4927,7 @@ export class Engine {
 
             gl.bindRenderbuffer(gl.RENDERBUFFER, colorRenderbuffer);
 
-            let validSamples = Math.min(samples, gl.getParameter(gl.MAX_SAMPLES));
-
-            gl.renderbufferStorageMultisample(gl.RENDERBUFFER, validSamples, this._getRGBAMultiSampleBufferFormat(texture.type), texture.width, texture.height);
+            gl.renderbufferStorageMultisample(gl.RENDERBUFFER, Math.min(samples, gl.getParameter(gl.MAX_SAMPLES)), this._getRGBAMultiSampleBufferFormat(texture.type), texture.width, texture.height);
 
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, colorRenderbuffer);
 

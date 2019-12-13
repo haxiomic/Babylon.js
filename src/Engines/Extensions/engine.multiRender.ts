@@ -261,8 +261,6 @@ Engine.prototype.updateMultipleRenderTargetTextureSampleCount = function(texture
 
     var gl = this._gl;
 
-    samples = Math.min(samples, gl.getParameter(gl.MAX_SAMPLES));
-
     // Dispose previous render buffers
     if (textures[0]._depthStencilBuffer) {
         gl.deleteRenderbuffer(textures[0]._depthStencilBuffer);
@@ -305,7 +303,7 @@ Engine.prototype.updateMultipleRenderTargetTextureSampleCount = function(texture
             }
 
             gl.bindRenderbuffer(gl.RENDERBUFFER, colorRenderbuffer);
-            gl.renderbufferStorageMultisample(gl.RENDERBUFFER, samples, this._getRGBAMultiSampleBufferFormat(texture.type), texture.width, texture.height);
+            gl.renderbufferStorageMultisample(gl.RENDERBUFFER, Math.min(samples, gl.getParameter(gl.MAX_SAMPLES)), this._getRGBAMultiSampleBufferFormat(texture.type), texture.width, texture.height);
 
             gl.framebufferRenderbuffer(gl.FRAMEBUFFER, attachment, gl.RENDERBUFFER, colorRenderbuffer);
 
