@@ -176,6 +176,7 @@ export class Scene extends AbstractScene implements IAnimatable {
     public environmentBRDFTexture: BaseTexture;
 
     public renderTargetTexture?: InternalTexture;
+    public renderTargetTexturePrepareFrame?: InternalTexture;
 
     /** @hidden */
     protected _environmentTexture: Nullable<BaseTexture>;
@@ -3432,7 +3433,7 @@ export class Scene extends AbstractScene implements IAnimatable {
 
         // Prepare Frame
         if (this.postProcessManager && !camera._multiviewTexture) {
-            this.postProcessManager._prepareFrame(this.renderTargetTexture);
+            this.postProcessManager._prepareFrame(this.renderTargetTexturePrepareFrame || this.renderTargetTexture);
         }
 
         // Viewport
