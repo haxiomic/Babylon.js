@@ -394,6 +394,11 @@ export class EnvironmentTextureTools {
             generateNonLODTextures = true;
             lodTextures = {};
         }
+        else if ((texture as any)._notRGBD) {
+            expandTexture = false;
+            texture.generateMipMaps = false;
+            texture.type = Constants.TEXTURETYPE_UNSIGNED_INT;
+        }
         // in webgl 1 there are no ways to either render or copy lod level information for float textures.
         else if (engine.webGLVersion < 2) {
             expandTexture = false;
